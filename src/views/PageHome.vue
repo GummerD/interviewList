@@ -1,6 +1,6 @@
 <template>
   <main>
-    Всякое разное
+    ДОМАШНЯЯ СТРАНИЦА
   </main>
 </template>
 

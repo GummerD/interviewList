@@ -3,7 +3,7 @@
     <AppHeader></AppHeader>
     <div class="contant">
       <RouterView>
-        <HomeView></HomeView>
+        
       </RouterView>
     </div>
   </div>
