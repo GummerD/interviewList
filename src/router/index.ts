@@ -4,11 +4,14 @@ import type { RouteRecordRaw,
   NavigationGuardNext 
 } from 'vue-router'
 
-import { useUserStore } from '@/stores/useUserStore'
+//import { useUserStore } from '@/stores/useUserStore'
+
+import { getAuth, onAuthStateChanged } from 'firebase/auth'
 
 import PageHome from '@/views/PageHome.vue'
 import PageAuth from '@/views/PageAuth.vue'
 
+/* постраничный переход делаем через firebase
 const checkAuth = (
   to: RouteLocationNormalized, 
   from: RouteLocationNormalized, 
@@ -23,6 +26,30 @@ const checkAuth = (
   }
 
 }
+*/
+
+const checkAuth = (
+  to: RouteLocationNormalized, 
+  from: RouteLocationNormalized, 
+  next: NavigationGuardNext
+) =>{
+  let isAuth = false
+
+  onAuthStateChanged(
+    getAuth(), (user)=> {
+      if(user && !isAuth){
+        isAuth = true
+        next()
+      } else if (!user && !isAuth){
+        isAuth = true
+        next('/auth')
+      }
+    }
+  );
+  
+
+}
+
 
 const routes:  RouteRecordRaw[] = [
   {

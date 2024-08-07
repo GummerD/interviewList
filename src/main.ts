@@ -2,6 +2,7 @@ import './assets/main.css'
 import 'primeflex/primeflex.css'
 import 'primeicons/primeicons.css'
 
+import { initializeApp } from "firebase/app";
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -10,7 +11,10 @@ import Aura from '@primevue/themes/aura';
 import Menubar from 'primevue/menubar';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
-import { initializeApp } from "firebase/app";
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+import ProgressSpinner from 'primevue/progressspinner';
+
 
 
 import App from './App.vue'
@@ -36,9 +40,12 @@ app.use( PrimeVue, {
         preset: Aura
     }
 })
+app.use(ToastService)
+
 app.component('app-menubar', Menubar)
 app.component('app-button', Button)
 app.component('app-input-text', InputText)
-
+app.component('app-toast', Toast)
+app.component('app-spinner', ProgressSpinner)
 
 app.mount('#app')
