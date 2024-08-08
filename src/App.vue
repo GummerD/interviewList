@@ -4,7 +4,6 @@
     <AppHeader></AppHeader>
     <div class="contant">
       <RouterView>
-        
       </RouterView>
     </div>
   </div>

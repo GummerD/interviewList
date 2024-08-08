@@ -82,6 +82,12 @@ const routes:  RouteRecordRaw[] = [
     component: () => import('@/views/PageStatistic.vue'),
     beforeEnter: checkAuth
   },
+  {
+    path: '/add',
+    name: 'PageAdd',
+    component: () => import('@/views/PageAdd.vue'),
+    beforeEnter: checkAuth
+  },
 ]
 
 const router = createRouter({
