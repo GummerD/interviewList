@@ -38,9 +38,10 @@
   import type {IInterview} from '@/interfaces';
   import  { v4 as uuidv4 } from 'uuid';
   import { getAuth } from 'firebase/auth';
-  import { getFirestore, setDoc, doc } from 'firebase/firestore'; // для сохранения в firebase
+  import { setDoc, doc } from 'firebase/firestore'; // для сохранения в firebase
   import { useRouter } from 'vue-router';
   import { useToast } from 'primevue/usetoast';
+  import { db } from '@/main';
 
   const company = ref<string>('');
   const vacancyLink = ref<string>('');
@@ -51,10 +52,8 @@
   const toast = useToast();
   
   const loading = ref<boolean>(false);
-  const db = getFirestore();
   const route = useRouter();
   
-
   const addNewInterview = async(): Promise<void> => {
 
     loading.value = true;
