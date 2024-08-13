@@ -6,6 +6,7 @@ import 'primeicons/primeicons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { useUserStore } from './stores/useUserStore'
 import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura';
 
@@ -13,7 +14,10 @@ import Aura from '@primevue/themes/aura';
 //компопненты PRIMEVUE:
 import Menubar from 'primevue/menubar';
 import Button from 'primevue/button';
+import RadioButton from 'primevue/radiobutton'
 import InputText from 'primevue/inputtext';
+import InputNumber from 'primevue/inputnumber'
+import Textarea from 'primevue/textarea';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import ProgressSpinner from 'primevue/progressspinner';
@@ -23,6 +27,7 @@ import Column from 'primevue/column';
 import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
 import Message from 'primevue/message';
+import Calendar from 'primevue/calendar'
 
 
 // подключение к БД (последовтельность инструкций имеет значение):
@@ -45,6 +50,7 @@ export const db = getFirestore();//4
 import App from './App.vue'//1
 import router from './router'//2
 
+
 const app = createApp(App)
 
 app.use(createPinia())
@@ -60,6 +66,8 @@ app.use(ConfirmationService)
 app.component('app-menubar', Menubar)
 app.component('app-button', Button)
 app.component('app-input-text', InputText)
+app.component('app-input-number', InputNumber)
+app.component('app-textarea', Textarea)
 app.component('app-toast', Toast)
 app.component('app-spinner', ProgressSpinner)
 app.component('app-card', Card)
@@ -67,5 +75,8 @@ app.component('app-table', DataTable)
 app.component('app-column', Column)
 app.component('app-confirm-dialog', ConfirmDialog)
 app.component('app-message', Message)
+app.component('app-calendar', Calendar)
+app.component('app-radiobutton', RadioButton)
+
 
 app.mount('#app')

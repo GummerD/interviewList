@@ -7,4 +7,15 @@ export interface IInterview {
     contactWhatsApp?: string,
     contactPhone?: string,
     createdAt: Date,
+    salaryFrom?: number,
+    salaryTo?: number,
+    stages: IStage,
+    result: 'Refusal' | 'Offer',
+}
+
+
+export interface IStage{
+    stageName?: string,
+    stageCalendar?: string,
+    stageComments?:  string,
 }
