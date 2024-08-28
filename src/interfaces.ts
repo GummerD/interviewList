@@ -16,6 +16,6 @@ export interface IInterview {
 
 export interface IStage{
     stageName?: string,
-    stageCalendar?: string,
+    stageCalendar?: null | Date,
     stageComments?:  string,
 }
