@@ -8,14 +8,33 @@
     <div v-else>
         <h1>Список собеседований:</h1>
         <app-table :value="interviews" tableStyle="min-width: 50rem" v-if="isLoading">
-            <app-column field="id" header="ID"></app-column>
             <app-column field="company" header="Company"></app-column>
             <app-column field="vacancyLink" header="VacancyLink">
                 <template #body="slotProps">
-                    <a :href="slotProps.data.vacancyLink" target="_blank">{{ slotProps.data.vacancyLink }}</a>
+                    <a :href="slotProps.data.vacancyLink" target="_blank">Ссылка на вакансию</a>
                 </template>
             </app-column>
             <app-column field="hrName" header="HrName"></app-column>
+            <app-column header="Пройденные этапы">
+                <template #body="slotProps">
+                    <span v-if="!slotProps.data.stages">Пройденных этапов нет</span>
+                    <div class="flex gap-1" v-else>
+                        <app-badge 
+                            v-for="(stage, index) in slotProps.data.stages" 
+                            :key="index" 
+                            :value="index+1"
+                            rounded
+                            v-tooltip.top="stage.stageName"
+                            ></app-badge>
+                    </div> 
+                </template>
+            </app-column>
+            <app-column header="Зарплатная вилка">
+                <template #body="slotProps">
+                    <span v-if="!slotProps.data.salaryFrom">Зарплатная вилка не указана</span>
+                    <span v-else>{{slotProps.data.salaryFrom}} - {{slotProps.data.salaryTo}} </span>
+                </template>
+            </app-column>
             <app-column header="Контаткты" class="contacts">
                 <template #body="slotProps" >
                     <div class="contacts">
@@ -46,19 +65,35 @@
                     </div>
                 </template>
             </app-column>
-        <app-column>
-            <template #body="slotProps" >
-                <div class="flex gap-2">
-                    <router-link :to="`/interview/${slotProps.data.id}`">
-                    <app-button icon="pi pi-pencil" severity="info"></app-button>
-                    </router-link>
-                    <app-button 
-                        icon="pi pi-trash" 
-                        severity="danger" 
-                        @click="deleteInterview(slotProps.data.id)"></app-button>
-                </div>
-            </template>
-        </app-column>
+            <app-column header="Результат">
+                <template #body="slotProps">
+                    <!-- Проверенный вариант разметки,который работает, можно еще через b
+                    <span v-if="!slotProps.data.result">Результат пока нет</span>
+                    <span v-else-if="slotProps.data.result == 'Offer'" style="color: green">{{slotProps.data.result}}</span>
+                    <span v-else style="color: red">Отказ</span>
+                    -->
+                    <span v-if="!slotProps.data.result">Результат пока нет</span>
+                    <template v-else>
+                        <app-badge
+                            :severity="slotProps.data.result === 'Offer' ?  'success': 'danger'"
+                            :value="slotProps.data.result === 'Offer' ? 'Offer': 'Отказ'"
+                        />
+                    </template>
+                </template>
+            </app-column>
+            <app-column>
+                <template #body="slotProps" >
+                    <div class="flex gap-2">
+                        <router-link :to="`/interview/${slotProps.data.id}`">
+                        <app-button icon="pi pi-pencil" severity="info"></app-button>
+                        </router-link>
+                        <app-button 
+                            icon="pi pi-trash" 
+                            severity="danger" 
+                            @click="deleteInterview(slotProps.data.id)"></app-button>
+                    </div>
+                </template>
+            </app-column>
         </app-table>
     </div>
 </template>
@@ -151,4 +186,5 @@ onMounted(async () => {
 .contacts__icon {
   font-size: 20px;
 }
+
 </style>

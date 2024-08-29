@@ -28,6 +28,8 @@ import ConfirmDialog from 'primevue/confirmdialog';
 import ConfirmationService from 'primevue/confirmationservice';
 import Message from 'primevue/message';
 import Calendar from 'primevue/calendar'
+import Badge from 'primevue/badge'
+import Tooltip from 'primevue/tooltip'
 
 
 // подключение к БД (последовтельность инструкций имеет значение):
@@ -63,6 +65,8 @@ app.use( PrimeVue, {
 app.use(ToastService)
 app.use(ConfirmationService)
 
+app.directive('tooltip', Tooltip)
+
 app.component('app-menubar', Menubar)
 app.component('app-button', Button)
 app.component('app-input-text', InputText)
@@ -77,6 +81,7 @@ app.component('app-confirm-dialog', ConfirmDialog)
 app.component('app-message', Message)
 app.component('app-calendar', Calendar)
 app.component('app-radiobutton', RadioButton)
+app.component('app-badge', Badge)
 
 
 app.mount('#app')
