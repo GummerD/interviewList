@@ -6,7 +6,23 @@
         severity="info"
     > Собеседований пока нет...</app-message>
     <div v-else>
-        <h1>Список собеседований:</h1>
+        <div v-if="isLoading">
+            <h1>Список собеседований:</h1>
+            <div class="flex flex-wrap gap-3 mb-3">
+                <div class="flex align-items-center">
+                    <app-radiobutton inputId="searchResult1" name="result" value="Refusal" v-model="selectResult"/>
+                    <label class="ml-1" for="searchResult1">Отказ</label>
+                </div>
+                <div class="flex align-items-center">
+                    <app-radiobutton inputId="searchResult2" name="result" value="Offer" v-model="selectResult"/>
+                    <label class="ml-1" for="searchResult2">Offer</label>
+                </div>
+            </div>
+            <div class="flex align-items-center gap-2 mb-2" >
+                <app-button @click="submitFilter(true)" :disabled="!selectResult">Применить</app-button>
+                <app-button @click="submitFilter(false)" severity="danger" :disabled="!selectResult">Очистить</app-button>
+            </div>
+        </div>
         <app-table :value="interviews" tableStyle="min-width: 50rem" v-if="isLoading">
             <app-column field="company" header="Company"></app-column>
             <app-column field="vacancyLink" header="VacancyLink">
@@ -22,10 +38,10 @@
                         <app-badge 
                             v-for="(stage, index) in slotProps.data.stages" 
                             :key="index" 
-                            :value="index+1"
+                            :value="index + 1"
                             rounded
                             v-tooltip.top="stage.stageName"
-                            ></app-badge>
+                        ></app-badge>
                     </div> 
                 </template>
             </app-column>
@@ -107,6 +123,7 @@ import {
     getDocs,
     deleteDoc,
     doc,
+    where
 } from 'firebase/firestore';
 import { useUserStore } from '@/stores/useUserStore';
 import { db } from '@/main';
@@ -118,12 +135,30 @@ const userId = userStore.userId;
 
 const interviews = ref<IInterview[]>([]);
 const isLoading = ref<boolean>(true);
+const selectResult = ref<string>('')
+
 
 const confirm = useConfirm();
 
-const getAllinterviews = async <T extends IInterview>(): Promise<T[]> => {
+const submitFilter = async (isFilter?: boolean): Promise<void> => {
+
+    isLoading.value = false;
+
+    const listInterviews: Array<IInterview> = await getAllinterviews(isFilter);
+    interviews.value = listInterviews;
+    
+    isLoading.value = true;
+}
+
+const getAllinterviews = async <T extends IInterview>(isFilter?: boolean): Promise<T[]> => {
     // формируем запрос серверу с уже необходимыми параметрами:
-    const getData = query(collection(db, `users/${userId}/interviews`), orderBy('createdAt', 'desc'));
+    let getData; 
+
+    if(isFilter){
+        getData = query(collection(db, `users/${userId}/interviews`), orderBy('createdAt', 'desc'), where('result', '==', selectResult.value )); 
+    }else{
+        getData = query(collection(db, `users/${userId}/interviews`), orderBy('createdAt', 'desc')); 
+    }
 
     // отправляем запрос серверу с сформированным запросом:
     const listDocs = await getDocs(getData);
@@ -158,7 +193,7 @@ const deleteInterview = async (id: string): Promise<void> => {
 }
 
 onMounted(async () => {
-    const listInterviews: Array<IInterview> = await getAllinterviews();
+    const listInterviews: Array<IInterview> = await getAllinterviews(false);
     //console.log(listInterviews);
     interviews.value = [...listInterviews];
 
